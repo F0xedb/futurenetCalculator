@@ -14,8 +14,8 @@ class money:
 
     def CalcWinnings(self, amount):
         if self.args.holiday:
-            return (amount / 60.0) * 8.0
-        return  amount / 6.0
+            return (amount / 120.0) * 8.0
+        return amount / 6.0
 
     def CalcWinningsAdAcc(self, amount):
         if self.args.holiday:

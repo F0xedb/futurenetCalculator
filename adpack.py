@@ -118,14 +118,12 @@ class adpacks:
 
     def AdpackProfit(self):
         h = 0.0
-        h2 = 0.0
         if self.args.holiday:
-            h = 5.7
-            h2 = 0.3
+            h = 0.45/10.0
         if self.args.adpacks:
             adpacks = int(self.args.adpacks)
-            balance = adpacks * (0.45 / 60.0) * (57.0 - h)
-            add = adpacks * (0.45 / 60.0) * (3.0 - h2)
+            balance = adpacks * ((0.45-h) / 60.0) * (57.0)
+            add = adpacks * ((0.45-h) / 60.0) * (3.0)
             print("Your daily profit will be " + str(balance) + " dollars")
             print("Your daily advertising account profit will be " + str(add) + " dollars")
             money.money(self.args).profit(self.args.profit, balance, 1)

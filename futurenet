@@ -1,0 +1,14 @@
+futureaddpro select add:
+javascript:(function()%7Bwindow.location.href %3D document.querySelectorAll(".panel-body a")%5B0%5D.href%7D)()
+
+futureaddpro return to add selection
+javascript:(function()%7Bwindow.location.href %3D document.querySelectorAll(".panel-body a")%5B1%5D.href%7D)()
+
+futurenet dashboard
+javascript:(function()%7Bwindow.location.href%3D document.querySelectorAll("%23nav a")%5B0%5D.href%7D)()
+
+futurenet profile
+javascript:(function()%7Bwindow.location.href%3D document.querySelectorAll("%23nav a")%5B1%5D.href%7D)()
+
+futurenet watchadd button
+javascript:(function()%7Bwindow.location.href %3D document.querySelectorAll(".top-nav .list-unstyled a")%5B33%5D.href%7D)()
