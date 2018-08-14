@@ -128,15 +128,23 @@ class adpacks:
             print("Your daily advertising account profit will be " + str(add) + " dollars")
             money.money(self.args).profit(self.args.profit, balance, 1)
 
+    def CalcBalancefromWinning(self, winning):
+        if self.args.holiday:
+            return (winning / (5.7)) * 57.0
+        return (winning / 7.0) * 57.0
+
     def targetProfit(self):
         h = 0.0
+        h2 = 0.0
         if self.args.holiday:
-            h = 12.0
+            h = 0.45/10.0
+            h2 = 20.0 - 12.0
         if self.args.targetprofit:
-            adpacks = float(self.args.targetprofit) / ((((0.45 / 60.0) * (57.0)) / 120) * (20.0 - h))
+            #adpacks = float(self.args.targetprofit) / (((((0.45-h) / 60.0) * (57.0)) / 120) * (20.0-h2))
+            adpacks = self.CalcBalancefromWinning(float(self.args.targetprofit)) / (0.45-h)
             adpacks = math.floor(adpacks) + 1
-            bal = adpacks * (0.45 / 60.0) * (57.0)
-            profit = (bal / 120.0) * (20.0 - h)
+            bal = adpacks * ((0.45-h) / 60.0) * (57.0-5.7)
+            profit = (bal / 120.0) * (20.0-h2)
             print("You will need a minimum of " + str(int(adpacks)) + " adpacks this will generate " + str(
                 bal) + " dollars and " + str(profit) + " dollars of profit daily")
 

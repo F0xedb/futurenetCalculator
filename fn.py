@@ -2,6 +2,7 @@ import argparser
 import money
 import adpack
 import date
+import file
 
 
 
@@ -32,6 +33,7 @@ def init(argument, date):
         packs.AdpackProfit()
 
     packs.targetProfit()
+    file.file(args).TotalEarnings()
 
 
 if __name__ == '__main__':

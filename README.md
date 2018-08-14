@@ -49,6 +49,16 @@ Calculate amount of balance in x days
 ```
 python3 futurenet.py -D [YYYY-MM-DD] -a [adpacks] -b [balance] -pb -pa
 ```
+
+Calculate profit your friends have given you listed in a file
+```
+python3 futurenet.py -f [file]
+```
+Calculate profit your friends have given you listed in a file and append new information:
+```
+python3 futurenet.py -f [file] -fe [Winst1] [Winst2] [Winst3] ... [WinstN]
+```
+
 # How to install
 1 - First you will have to install python (either 2.7 or 3.x will work)
 follow the instructions for your OS
