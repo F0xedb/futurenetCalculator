@@ -5,7 +5,6 @@ import date
 import file
 
 
-
 def init(argument, date):
     if argument.args.usage:
         argument.usage()
