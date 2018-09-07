@@ -24,7 +24,7 @@ def init(argument, date):
         money.money(args).profit(args.countprofit, countmoney, len(args.count))
 
     # predict adpack amount in x days
-    packs = adpack.adpacks(args.adpacks, args.balance, 0.0, 60.0, 0.45, args, date)
+    packs = adpack.adpacks(args.adpacks, args.balance, 0.0, 60.0, float(args.course), args, date)
     packs.predictAdpacks()
 
     packs.predictTime()

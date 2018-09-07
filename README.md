@@ -58,6 +58,10 @@ Calculate profit your friends have given you listed in a file and append new inf
 ```
 python3 futurenet.py -f [file] -fe [Winst1] [Winst2] [Winst3] ... [WinstN]
 ```
+Calculate profit your earned daily in a file while holiday mode is active and append new information :
+```
+python3 futurenet.py -f [file] -de [Winst1] [Winst2] [Winst3] ... [WinstN] -hd
+```
 
 # How to install
 1 - First you will have to install python (either 2.7 or 3.x will work)

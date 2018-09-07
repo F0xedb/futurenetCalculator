@@ -21,14 +21,24 @@ class argparser:
         self.parser.add_argument('-ap', '--adpackprofit', help='print balance', action='store_true', default=False)
         self.parser.add_argument('-e', '--extra', help='print the amount of days,hours, minutes before getting a new adpack',
                             action='store_true', default=False)
-        self.parser.add_argument('-b', '--balance', help='Enter your current balance', default=0)
+        self.parser.add_argument('-b', '--balance', help='Enter your current balance', default=0.0)
         self.parser.add_argument('-t', '--total', help='Total accumulated balance', action='store_true', default=False)
         self.parser.add_argument('-hd', '--holiday', help='Calculate everything acorrding to the holiday settings',
                             action='store_true', default=False)
+        self.parser.add_argument('-chd', '--convertholiday', help='convert holiday profit in a file to normal profit', action='store_true', default=False)
         self.parser.add_argument('-tp', '--targetprofit',
                             help='Calculate the amount of adpacks necesery to achieve your profit')
         self.parser.add_argument('-f', '--file', help='the file where to save your profit earned from friends')
         self.parser.add_argument('-fe', '--friendearnings', help='Earnings from your friends', nargs='*')
+        self.parser.add_argument('-de', '--dailyearnings', help='Earnings from your friends', nargs='*')
+        self.parser.add_argument('--fuse', help='Earnings from your friends', nargs='*')
+        self.parser.add_argument('--totalprofit', help='The total profit you gain when reinvesting',
+                                 action='store_true', default=False)
+        self.parser.add_argument('-pp', '--payoutprofit', help='When earning payout your profit',
+                                 action='store_true', default=False)
+        self.parser.add_argument('-tb', '--totalbought', help='Count the total amount of adpacks bought',
+                                 action='store_true', default=False)
+        self.parser.add_argument('--course', help='the amount one adpack generates in one day', default=0.45)
 
         self.args = self.parser.parse_args()
 
@@ -59,7 +69,11 @@ class argparser:
             print("        <name> -D [YYYY-MM-DD] -a [Adpacks] -b [Balance] -pb")
             print("    Calculate amount of balance in x days and print the total accumulated balance (if you kept the balance from the beginning) ")
             print("        <name> -D [YYYY-MM-DD] -a [Adpacks] -b [Balance] -r -t")
+            print("    Calculate amount of profit in x days and print the total balance profit each day")
+            print("        <name> -D [YYYY-MM-DD] -a [Adpacks] -b [Balance] -r --totalprofit")
             print("    Calculate profit your friends have given you listed in a file:")
             print("        <name> -f file")
             print("    Calculate profit your friends have given you listed in a file and append new information:")
             print("        <name> -f file -fe [Winst1] [Winst2] [Winst3] ... [WinstN]")
+            print("    Add multiple files together:")
+            print("        <name> -f [output] -fuse [file1] [file2] [file3] ... [fileN]")

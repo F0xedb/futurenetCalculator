@@ -4,13 +4,13 @@ import math
 print('Automating futurenet clicking software v 1.0.0')
 print('Press Ctrl-C to quit.')
 
-#timing constants
+# timing constants
 seconds = 1
 minutes= 60 * seconds
 hour= 60 * minutes
 day= 24* hour
 
-#profile and dashboard coords
+# profile and dashboard coords
 dbx=385
 dby=106
 pfx=473
@@ -19,15 +19,18 @@ pfy=106
 addx = 570
 addy=106
 
-#bookmarklet coords
+# bookmarklet coords
 bm1x=131
 bm1y=106
 bm2x=270
 bm2y=106
 
+# simulates human motion
 delay = 0.5
 
-AddDelay = 35
+# 30 + loadingdelay
+AddDelay = 35 # delay after the add runs
+sleep = 4 # howlang you wait between button presses
 bisDashboard = True
 
 
@@ -72,11 +75,11 @@ def loop():
     i = 0
     while i < 11:
         bookmarklet1()
-        tm.sleep(2)
+        tm.sleep(sleep)
         center()
         tm.sleep(AddDelay)
         bookmarklet2()
-        tm.sleep(2)
+        tm.sleep(sleep)
         i = i + 1
 
 

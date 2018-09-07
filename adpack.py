@@ -12,11 +12,11 @@ class adpack:
         self.worth = worth
         self.course = course
         self.args = args
-        self.earning = adpackmoney(0.0,0.0)
+        self.earning = adpackmoney(0.0, 0.0)
 
     def getDistrbutedEarnings(self, amount):
         dollars = money.money(self.args)
-        self.earning = adpackmoney(dollars.CalcWinningsBalance(amount), dollars.CalcWinningsAdAcc(amount))
+        self.earning = adpackmoney(dollars.CalcBalance(amount), dollars.CalcWinningsAdAcc(amount))
         return self.earning
 
     def GetDailyEarning(self):
@@ -38,6 +38,8 @@ class adpacks:
         self.course = float(course)
         self.args = args
         self.adpacks = self.genAdpacks(int(adpacks))
+        self.totalsub = 0
+        self.totalBought = int(adpacks)
 
     def genAdpacks(self, amount):
         i = 0
@@ -57,6 +59,7 @@ class adpacks:
         self.total = self.balance
         _money = money.money(self.args)
 
+
         while i < days:
 
             # gain the money.money from your adpacks
@@ -66,6 +69,10 @@ class adpacks:
                 self.balance += earnings.balance
                 self.advert += earnings.advert
                 self.total += earnings.balance
+                if self.args.payoutprofit:
+                    substract = _money.CalcWinningsBalance(earnings.balance)
+                    self.balance -= substract
+                    self.totalsub += substract
                 if self.adpacks[j].worth <= 0:
                     del self.adpacks[j]
                 j += 1
@@ -79,6 +86,7 @@ class adpacks:
                 k = 0
                 while k < amount:
                     self.adpacks.append(adpack(self.worth, self.course, self.args))
+                    self.totalBought+=1
                     k += 1
                 self.balance -= (50.0 * amount)
 
@@ -109,6 +117,7 @@ class adpacks:
             if self.args.reinvest:
                 amount = self.getAdpacksInXDays(days)
                 print("You will have " + str(amount) + " adpacks in " + str(days) + " days")
+                self.TotalDailyProfit(int(self.args.adpacks),amount)
             elif self.args.printbalance:
                 amount = self.SimulateXDaysNoReinvest(days)
                 print("After " + str(days) + " days you will have earned " + str(amount) + " dollar")
@@ -116,37 +125,51 @@ class adpacks:
                     print("And your total accumulated balance is the same")
                 money.money(self.args).profit(True, amount, days)
 
+    def TotalDailyProfit(self,original,now):
+        if self.args.totalprofit:
+            MoneyVar = money.money(self.args)
+            delta = now - original #adpacks that purely generate profit
+            originalBal = MoneyVar.CalcWinningsBalance(self.calcAmountFromAdpack(original)) #calculate the profit the original adpacks generate
+            deltaBal = self.calcAmountFromAdpack(delta) - MoneyVar.CalcWinningsAdAcc(self.calcAmountFromAdpack(delta))
+            total = originalBal + deltaBal
+            print("The total profit you gain each day is " + str(total) + " dollars know that this will slowly remove your adpacks until you have " + str(original) + " left.")
+
+
     def AdpackProfit(self):
-        h = 0.0
-        if self.args.holiday:
-            h = 0.45/10.0
+        moneyVar = money.money(self.args)
         if self.args.adpacks:
             adpacks = int(self.args.adpacks)
-            balance = adpacks * ((0.45-h) / 60.0) * (57.0)
-            add = adpacks * ((0.45-h) / 60.0) * (3.0)
-            print("Your daily profit will be " + str(balance) + " dollars")
+            winnings = self.calcAmountFromAdpack(adpacks)
+            bal = winnings - moneyVar.CalcWinningsAdAcc(winnings)
+            add = moneyVar.CalcWinningsAdAcc(winnings)
+            print("Your daily profit will be " + str(winnings) + " dollars")
             print("Your daily advertising account profit will be " + str(add) + " dollars")
-            money.money(self.args).profit(self.args.profit, balance, 1)
+            money.money(self.args).profit(self.args.profit, bal, 1)
 
     def CalcBalancefromWinning(self, winning):
+        moneyVar = money.money(self.args)
+        # profit of one adpack
+        winst_one = moneyVar.profitOnePack()
+        return int(winning / winst_one) + 1
+
+    def calcAmountFromAdpack(self, packs):
         if self.args.holiday:
-            return (winning / (5.7)) * 57.0
-        return (winning / 7.0) * 57.0
+            return packs * float(self.args.course) * 0.9
+        return  packs * float(self.args.course)
+
+    def calcAmountFromAdpackNOHd(self, packs):
+        return  packs * float(self.args.course)
 
     def targetProfit(self):
-        h = 0.0
-        h2 = 0.0
-        if self.args.holiday:
-            h = 0.45/10.0
-            h2 = 20.0 - 12.0
+        moneyVar = money.money(self.args)
         if self.args.targetprofit:
-            #adpacks = float(self.args.targetprofit) / (((((0.45-h) / 60.0) * (57.0)) / 120) * (20.0-h2))
-            adpacks = self.CalcBalancefromWinning(float(self.args.targetprofit)) / (0.45-h)
-            adpacks = math.floor(adpacks) + 1
-            bal = adpacks * ((0.45-h) / 60.0) * (57.0-5.7)
-            profit = (bal / 120.0) * (20.0-h2)
-            print("You will need a minimum of " + str(int(adpacks)) + " adpacks this will generate " + str(
-                bal) + " dollars and " + str(profit) + " dollars of profit daily")
+            #adpacks = float(self.args.targetprofit) / (((((float(self.args.course)-h) / 60.0) * (57.0)) / 120) * (20.0-h2))
+            adpacks = self.CalcBalancefromWinning(float(self.args.targetprofit))
+            winnings = self.calcAmountFromAdpackNOHd(adpacks)
+            bal = winnings - moneyVar.CalcWinningsAdAcc(winnings)
+            profit = moneyVar.CalcWinningsBalance(winnings)
+            print("You will need a minimum of " + str((adpacks)) + " adpacks this will generate " + str(
+                self.calcAmountFromAdpack(adpacks)) + " dollars and " + str(profit) + " dollars of profit daily")
 
     def amountOver(self, value, earning):
         rest = value / earning
@@ -158,11 +181,11 @@ class adpacks:
     def predictTime(self):
         h = 0.0
         if self.args.holiday:
-            h = 0.45 * 0.1
+            h = float(self.args.course) * 0.1
         if self.args.extra and self.args.adpacks:
             adpacks = int(self.args.adpacks)
             required = 50.0
-            DailyProfit = adpacks * ((0.45 - h) / 60.0) * 57.0
+            DailyProfit = adpacks * ((float(self.args.course) - h) / 60.0) * 57.0
             amount = math.floor(required / DailyProfit) + 1
 
             if DailyProfit < 50.0:
@@ -179,3 +202,7 @@ class adpacks:
             print("your total accumulated balance is: " + str(self.total))
         if self.args.printadvert:
             print("Your advertisment balance is: " + str(self.advert))
+        if self.args.payoutprofit:
+            print("Your payout is " + str(self.totalsub))
+        if self.args.totalbought:
+            print("The total amount of adpacks you have bought is: " + str(self.totalBought))
